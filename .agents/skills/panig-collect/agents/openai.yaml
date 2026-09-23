@@ -1,0 +1,3 @@
+interface:
+  display_name: "Panig Collect"
+  short_description: "Scrape daily source text into SQLite"

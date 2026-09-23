@@ -1,0 +1,41 @@
+---
+import PerspectiveIcon from './PerspectiveIcon.astro';
+import { CREATOR_READINGS } from '../data/briefings.js';
+
+const { lenses, creators, sectionId } = Astro.props;
+const counts = lenses.map((lens) => creators.filter((take) => CREATOR_READINGS[take.headline]?.lens === lens.id).length);
+const total = creators.length;
+const postWord = (count) => (count === 1 ? 'post' : 'posts');
+---
+
+<section class="perspective-strip" aria-label="How sampled posts frame this story" data-perspective-strip={sectionId}>
+  <div class="perspective-strip__heading">
+    <h3>How these posts frame the story</h3>
+    <p>{total} sampled creator {postWord(total)} on this event. Not public opinion.</p>
+  </div>
+  <div class="perspective-scale">
+    {lenses.map((lens, index) => {
+      const count = counts[index];
+      const empty = count === 0;
+      return (
+        <button
+          class:list={['perspective-choice', `perspective-choice--${index + 1}`, { 'is-empty': empty }]}
+          style={`flex-grow: ${empty ? 0.42 : count}`}
+          type="button"
+          data-perspective={lens.id}
+          data-cluster={sectionId}
+          data-count-label={`${count} ${postWord(count)}`}
+          aria-pressed="false"
+          disabled={empty}
+        >
+          <span class="perspective-choice__swatch">
+            <span class="perspective-choice__icon"><PerspectiveIcon name={lens.icon} /></span>
+          </span>
+          <span class="perspective-choice__label">{lens.label}</span>
+          <span class="perspective-choice__unit">{postWord(count)}</span>
+        </button>
+      );
+    })}
+  </div>
+  <p class="perspective-strip__status" aria-live="polite">Showing all sampled posts.</p>
+</section>

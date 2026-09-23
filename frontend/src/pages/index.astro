@@ -1,0 +1,150 @@
+---
+import ClusterSection from '../components/ClusterSection.astro';
+import { BRIEFINGS, DATE_ORDER } from '../data/briefings.js';
+import '../styles/panig.css';
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const formatLong = (iso) => {
+  const [year, month, day] = iso.split('-').map(Number);
+  return `${BRIEFINGS[iso].weekday}, ${months[month - 1]} ${day}, ${year}`;
+};
+const formatPill = (iso) => {
+  const [, month, day] = iso.split('-').map(Number);
+  return `${months[month - 1].slice(0, 3)} ${day}`;
+};
+const latestDate = DATE_ORDER[0];
+const clusterMeta = (iso) => `${BRIEFINGS[iso].clusters.length} story examples · creator posts and newsroom reporting compared around each event.`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panig.News — See the story, the spin, and the evidence</title>
+    <meta name="description" content="Algorithm-independent Philippine news. Compare newsrooms, creators, and primary evidence — without the echo chamber." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip" href="#briefing">Skip to briefing</a>
+
+    <nav class="topic-rail" id="topic-nav" aria-label="Briefing topics">
+      <p class="topic-rail__label">Topics</p>
+      {DATE_ORDER.map((iso, dayIndex) => (
+        <ol data-topic-day={iso} hidden={dayIndex !== 0}>
+          {BRIEFINGS[iso].clusters.map((cluster, index) => (
+            <li>
+              <a href={`#${iso}-${cluster.id}`} data-topic={`${iso}-${cluster.id}`} class:list={{ 'is-active': index === 0 }}>
+                <span class="topic-rail__index">{String(index + 1).padStart(2, '0')}</span>
+                <span class="topic-rail__title">{cluster.title}</span>
+                <span class="topic-rail__count">{cluster.takes.length}</span>
+                <span class="topic-rail__kicker">{cluster.kicker}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      ))}
+    </nav>
+
+    <div class="shell">
+      <header class="masthead">
+        <div class="masthead__inner">
+          <a class="wordmark" href="/" aria-label="Panig.News home">
+            <span class="wordmark__mark" aria-hidden="true">
+              <span class="wordmark__facet wordmark__facet--a"></span>
+              <span class="wordmark__facet wordmark__facet--b"></span>
+            </span>
+            <span class="wordmark__type">Panig<span class="wordmark__dot">.</span>News</span>
+          </a>
+          <p class="masthead__promise">Escape the echo chamber. See the story, the spin, and the evidence.</p>
+          <nav class="masthead__nav" aria-label="Site">
+            <a href="#method">Methodology</a>
+            <a href="#briefing">Reading guide</a>
+            <a href="#about">About</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="date-hero" aria-labelledby="today-heading">
+        <div class="date-hero__inner">
+          <p class="eyebrow">Daily independent briefing · Philippines</p>
+          <h1 id="today-heading"><time id="hero-date" datetime={latestDate}>{formatLong(latestDate)}</time></h1>
+          <p class="date-hero__sub" id="hero-meta">{clusterMeta(latestDate)}</p>
+          <p class="sample-banner">Design example · The stories, excerpts, and interpretations on this page are illustrative, not live analysis.</p>
+          <nav class="date-rail" aria-label="Sample briefings" id="date-rail">
+            {DATE_ORDER.map((iso, index) => (
+              <button
+                class:list={['date-pill', { 'is-active': index === 0 }]}
+                type="button"
+                data-date={iso}
+                data-long-date={formatLong(iso)}
+                data-meta={clusterMeta(iso)}
+                aria-label={formatLong(iso)}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+              >{formatPill(iso)}{index === 0 && ' · Latest sample'}</button>
+            ))}
+          </nav>
+        </div>
+      </section>
+
+      <main id="briefing" class="briefing">
+        {DATE_ORDER.map((iso, index) => (
+          <div class="briefing-day" data-day={iso} hidden={index !== 0}>
+            <div class="briefing__toolbar">
+              <p class="coverage-note">{BRIEFINGS[iso].coverage}</p>
+            </div>
+            {BRIEFINGS[iso].clusters.map((cluster) => <ClusterSection cluster={cluster} date={iso} />)}
+          </div>
+        ))}
+      </main>
+
+      <section class="panel" id="method">
+        <div class="panel__inner">
+          <h2>How Panig reads a story</h2>
+          <p>
+            The editorial unit is the <em>story</em>, not a permanent brand on a newsroom or creator.
+            AI can prepare the comparison. Humans review labels that could harm reputation or overstate certainty.
+            Reach is an influence signal — never a truth signal.
+          </p>
+          <ol class="method-steps">
+            <li><strong>Collect</strong> public reporting, creator posts, and primary records from a deliberately mixed watchlist.</li>
+            <li><strong>Cluster</strong> items that refer to the same underlying event, keeping each version intact.</li>
+            <li><strong>Interpret each item</strong> through its frame in this story, emotional color, and what it cites. The three colors on a card are that story’s subcategories, each marked from 0 to 10.</li>
+            <li><strong>Publish</strong> a comparison with exact original links, uncertainty, and a corrections log.</li>
+          </ol>
+          <p class="panel__footnote">
+            Jev’s confidence in a classification is separate from whether a claim is true. Labels such as “demonstrably false” or coordination claims require documentary evidence and human approval.
+            Unsupported claims do not receive equal weight with authenticated records.
+          </p>
+        </div>
+      </section>
+
+      <footer class="site-footer" id="about">
+        <div class="site-footer__inner">
+          <p><strong>Panig</strong> is Filipino for <em>side</em>. This prototype shows how a day’s news can be read as competing panig — newsroom, influencer, and primary evidence — without asking you to trust only our summary.</p>
+          <p class="site-footer__meta">Proposed landing · concierge pilot aesthetic · not a live newsroom. Sample coverage is illustrative.</p>
+        </div>
+      </footer>
+    </div>
+
+    <div class="drawer" id="item-drawer" hidden>
+      <div class="drawer__scrim" data-close-drawer></div>
+      <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <button class="drawer__close" type="button" data-close-drawer>Close</button>
+        <p class="drawer__kicker" id="drawer-kicker"></p>
+        <h2 id="drawer-title"></h2>
+        <p class="drawer__meta" id="drawer-meta"></p>
+        <blockquote class="drawer__excerpt" id="drawer-excerpt"></blockquote>
+        <div id="drawer-reading"></div>
+        <p class="drawer__body" id="drawer-body"></p>
+        <p class="drawer__alt" id="drawer-alt"></p>
+        <a class="btn" id="drawer-source" href="#" target="_blank" rel="noopener noreferrer" hidden>Open exact source</a>
+        <p class="drawer__sample">Illustrative example. No verified item permalink is available in this mockup.</p>
+      </aside>
+    </div>
+
+    <script>import '../scripts/briefing.js';</script>
+  </body>
+</html>

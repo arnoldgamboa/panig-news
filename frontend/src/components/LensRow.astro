@@ -1,0 +1,17 @@
+---
+const { lenses, scores } = Astro.props;
+---
+
+<div class="lens-row">
+  {lenses.map((lens, index) => {
+    const value = scores?.[lens.id] ?? 0;
+    const marks = Array.from({ length: 10 }, (_, mark) => mark < value);
+    return (
+      <div class={`lens-row__item lens-row__item--${index + 1}`}>
+        <span class="lens-row__track" role="img" aria-label={`${lens.label}, ${value} of 10`}>
+          {marks.map((on) => <span class:list={['lens-row__mark', { 'is-on': on }]}></span>)}
+        </span>
+      </div>
+    );
+  })}
+</div>

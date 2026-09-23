@@ -1,0 +1,78 @@
+---
+import { CREATOR_READINGS, LENS_SCORES, STORY_LENSES } from '../data/briefings.js';
+import LensRow from './LensRow.astro';
+
+const { take, cluster, date } = Astro.props;
+const reading = take.lane === 'creator' ? CREATOR_READINGS[take.headline] : null;
+const lenses = date === '2026-09-22' ? STORY_LENSES[cluster.id] : null;
+const lensIndex = lenses?.findIndex((lens) => lens.id === reading?.lens) ?? -1;
+const lens = lensIndex >= 0 ? lenses[lensIndex] : null;
+const frameStyle = lens ? `--frame-color: var(--lens-${lensIndex + 1})` : undefined;
+const scores = lenses ? LENS_SCORES[take.headline] : null;
+const scoreSummary = lenses
+  ? lenses.map((item) => `${item.label} ${scores?.[item.id] ?? 0} of 10`).join('. ')
+  : '';
+const isFacebook = take.lane === 'creator' && !String(take.url || '').includes('youtube');
+---
+
+<article
+  class:list={['take', `take--${take.lane}`, { 'take--framed': Boolean(lens) }]}
+  style={frameStyle}
+  data-open-take
+  data-cluster-title={cluster.title}
+  data-lane={take.lane}
+  data-excerpt={take.excerpt}
+  data-summary={take.summary}
+  data-alt={take.alt || ''}
+  data-permalink={take.permalink || ''}
+  data-perspective-lens={reading?.lens || ''}
+  tabindex="0"
+  role="button"
+  aria-label={scoreSummary
+    ? `Read interpretation: ${take.headline}. ${scoreSummary}.`
+    : `Read interpretation: ${take.headline}`}
+>
+  <div class="take__top">
+    {take.lane === 'creator' ? (
+      <span class="take__who">
+        <span class="take__platform" aria-hidden="true">
+          {isFacebook ? (
+            <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+              <path fill="currentColor" d="M13.5 21v-7h2.3l.4-2.8h-2.7V9.4c0-.8.2-1.3 1.4-1.3H16.3V5.2h-2.1C11.6 5.2 10 6.8 10 9.2v2H8V14h2v7h3.5z"/>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+              <path fill="currentColor" d="M8.8 6.8v10.4l8.6-5.2z"/>
+            </svg>
+          )}
+        </span>
+        <span class="take__source">{take.source}</span>
+      </span>
+    ) : <span class="take__source">{take.source}</span>}
+  </div>
+  <h3>{take.headline}</h3>
+  {lenses && <LensRow lenses={lenses} scores={scores} />}
+  {take.excerpt && <blockquote class="take__quote">“{take.excerpt}”</blockquote>}
+  {reading?.frameCue && <p class="take__angle">{reading.frameCue}</p>}
+  {reading && (
+    <dl class="reading-list">
+      <div>
+        <dt>Position</dt>
+        <dd>{reading.position}</dd>
+      </div>
+      <div>
+        <dt>Emotional color</dt>
+        <dd class="reading-list__color">{reading.temperature}</dd>
+      </div>
+      <div>
+        <dt>Cited</dt>
+        <dd>{reading.grounding}</dd>
+      </div>
+    </dl>
+  )}
+  {!reading && take.summary && <p class="take__summary">{take.summary}</p>}
+  {!reading && take.lane === 'newsroom' && take.label && <span class={`evidence-label ${take.label.key}`}>{take.label.text}</span>}
+  <div class="take__footer">
+    <span>Full reading <span aria-hidden="true">→</span></span>
+  </div>
+</article>

@@ -1,0 +1,57 @@
+---
+import TakeCard from './TakeCard.astro';
+import PerspectiveStrip from './PerspectiveStrip.astro';
+import { STORY_COMPARISONS, STORY_LENSES } from '../data/briefings.js';
+
+const { cluster, date } = Astro.props;
+const sectionId = `${date}-${cluster.id}`;
+const newsrooms = cluster.takes.filter((take) => take.lane === 'newsroom');
+const creators = cluster.takes.filter((take) => take.lane === 'creator');
+const comparison = date === '2026-09-22' ? STORY_COMPARISONS[cluster.id] : null;
+const lenses = date === '2026-09-22' ? STORY_LENSES[cluster.id] : null;
+---
+
+<section class="cluster" id={sectionId}>
+  <header class="cluster__head">
+    <div class="cluster__story">
+      <h2>{cluster.title}</h2>
+      <p class="cluster__lede">{cluster.lede}</p>
+      {comparison && (
+        <div class="cluster__facts">
+          <p>{comparison.common}</p>
+          <p>{comparison.boundary}</p>
+        </div>
+      )}
+    </div>
+    <aside class="cluster__aside">
+      <h3>Record starting points</h3>
+      <ul>
+        {cluster.primary.map((item) => <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a></li>)}
+      </ul>
+      <p class="record-note">These links lead to institutions, not the exact documents for this sample story.</p>
+    </aside>
+  </header>
+
+  {lenses && <PerspectiveStrip lenses={lenses} creators={creators} sectionId={sectionId} />}
+
+  <div class="story-compare">
+    <div class="story-compare__col">
+      <div class="voices-heading">
+        <h3>Creator posts</h3>
+        <p>{creators.length} Facebook {creators.length === 1 ? 'post' : 'posts'} in this sample.</p>
+      </div>
+      <div class="takes takes--creators" data-creator-posts={sectionId}>
+        {creators.map((take) => <TakeCard take={take} cluster={cluster} date={date} />)}
+      </div>
+    </div>
+    <div class="story-compare__col">
+      <div class="voices-heading">
+        <h3>Newsroom reporting</h3>
+        <p>{newsrooms.length} {newsrooms.length === 1 ? 'article' : 'articles'} on the same event.</p>
+      </div>
+      <div class="takes takes--newsrooms">
+        {newsrooms.map((take) => <TakeCard take={take} cluster={cluster} date={date} />)}
+      </div>
+    </div>
+  </div>
+</section>

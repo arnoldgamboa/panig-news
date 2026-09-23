@@ -1,0 +1,9 @@
+---
+const { name, value } = Astro.props;
+---
+
+<div class="signal" title={`${name}: ${value}`}>
+  <span class="signal__name">{name}</span>
+  <span class="signal__track"><span class="signal__fill" style={`width:${value}%`}></span></span>
+  <span class="signal__val">{value}</span>
+</div>

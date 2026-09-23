@@ -1,7 +1,7 @@
-const BRIEFINGS = {
+export const BRIEFINGS = {
   "2026-09-22": {
     weekday: "Tuesday",
-    coverage: "Monitored 10 primary records, 12 publications, and 16 creators. Facebook personal profiles were out of scope. Two YouTube transcripts lagged the morning upload window.",
+    coverage: "Sample briefing. The people, posts, excerpts, and source counts here illustrate a possible reading experience; they do not describe today’s collected database items.",
     clusters: [
       {
         id: "sara-impeachment",
@@ -445,9 +445,9 @@ const BRIEFINGS = {
   }
 };
 
-const DATE_ORDER = ["2026-09-22", "2026-09-21", "2026-09-20", "2026-09-19"];
+export const DATE_ORDER = ["2026-09-22", "2026-09-21", "2026-09-20", "2026-09-19"];
 
-const SIGNAL_META = [
+export const SIGNAL_META = [
   { key: "evidence", name: "Evidence" },
   { key: "headline", name: "Headline fit" },
   { key: "loaded", name: "Loaded lang." },
@@ -455,3 +455,104 @@ const SIGNAL_META = [
   { key: "omission", name: "Omission" },
   { key: "tone", name: "Tone" }
 ];
+
+// Editorial copy for the illustrative September 22 briefing. These are
+// examples of the presentation, not model output or verified post analysis.
+export const STORY_COMPARISONS = {
+  'sara-impeachment': {
+    common: 'The Senate process and its next vote are the shared event.',
+    frames: [
+      { title: 'Political persecution', detail: 'A post casts the complaint as a public pile-on and asks readers to identify with Sara Duterte.' },
+      { title: 'Constitutional accountability', detail: 'Another asks readers to judge the complaint through the constitutional process and its documents.' }
+    ],
+    boundary: 'A claim about anyone’s motive needs more than a clip or a prediction about the vote.'
+  },
+  'luzon-flooding': {
+    common: 'The flooding and its immediate effect on commuters are the shared event.',
+    frames: [
+      { title: 'Lived disruption', detail: 'Posts show local conditions and ask why official coverage missed them.' },
+      { title: 'System failure', detail: 'Other posts connect the same rain to drainage decisions or longer climate trends.' }
+    ],
+    boundary: 'A firsthand account may be valid locally; footage dates and broader causal claims still need checking.'
+  },
+  'west-philippine-sea': {
+    common: 'The encounter at sea and the released videos are the shared event.',
+    frames: [
+      { title: 'Sovereignty and harm', detail: 'One post centers the people on deck and the force shown in the footage.' },
+      { title: 'De-escalation', detail: 'Another warns about the political effect of viral clips and calls for restraint.' }
+    ],
+    boundary: 'A call for restraint is a policy position; it does not by itself establish that the evidence from both governments is equal.'
+  },
+  'national-budget': {
+    common: 'The committee hearing and proposed allocations are the shared event.',
+    frames: [
+      { title: 'Who is responsible', detail: 'Some posts turn the hearing into a story about named political actors.' },
+      { title: 'Who is affected', detail: 'Others translate budget lines into likely effects on services and classrooms.' }
+    ],
+    boundary: 'A viral exchange is a fragment of the hearing; the proposed line item and its status are the checkable record.'
+  }
+};
+
+export const CREATOR_READINGS = {
+  'This is not justice. This is a pile-on.': { lens: 'defense', frameCue: 'Presents the complaint as an attack on Sara rather than a question about the filed evidence.', position: 'Defends Sara Duterte; questions the complaint’s motive', temperature: 'Heated · grievance and loyalty', grounding: 'No document cited in the sample excerpt' },
+  'Impeachment is a constitutional tool, not a personality war': { lens: 'procedure', frameCue: 'Treats the complaint as a constitutional process that deserves public scrutiny.', position: 'Favors public scrutiny of the complaint', temperature: 'Measured · legal argument', grounding: 'Refers to constitutional process; specific citation not shown here' },
+  'The real story is who is scared of a public trial': { lens: 'trial', frameCue: 'Reads procedural delay as fear of a trial, while inferring an opponent’s motive.', position: 'Favors a public trial; imputes motive to opponents', temperature: 'Heated · accusatory', grounding: 'Relies on livestream commentary in this sample' },
+  'EDSA looks fine on TV. Your side street is a river.': { lens: 'local', frameCue: 'Contrasts street-level flooding with the picture offered by broad news coverage.', position: 'Challenges official coverage of local flooding', temperature: 'Urgent · firsthand appeal', grounding: 'Video clips shown; dates not established in this sample' },
+  'This is what a hotter sea does to a night of rain': { lens: 'systems', frameCue: 'Turns one night of flooding into an argument about climate and drainage policy.', position: 'Connects the flood to climate and drainage policy', temperature: 'Urgent · advocacy', grounding: 'Cites rainfall figures; causal link needs separate support' },
+  'They knew. They still sent people to work.': { lens: 'blame', frameCue: 'Makes the flood a story of officials knowingly exposing people to danger.', position: 'Accuses officials of ignoring a warning', temperature: 'Heated · accusation', grounding: 'Anonymous screenshots; provenance not shown' },
+  'Do not look away from the boat': { lens: 'sovereignty', frameCue: 'Centers the people on deck and the harm shown in the released footage.', position: 'Emphasizes Philippine sovereignty and crew safety', temperature: 'Intense · protective', grounding: 'Uses edited footage; legal claims need separate citation' },
+  'Both sides have cameras. That is not the same as both sides being equal.': { lens: 'restraint', frameCue: 'Uses the encounter to argue for restraint instead of a more forceful response.', position: 'Argues for de-escalation', temperature: 'Measured · cautionary', grounding: 'Compares official statements; evidence quality remains disputed' },
+  'Your taxes, their sagala': { lens: 'accusation', frameCue: 'Uses hearing clips to cast politicians as wasteful and answerable to taxpayers.', position: 'Criticizes the hearing’s spending decisions', temperature: 'Heated · satirical', grounding: 'Edited hearing clips; figures require a check against the DBM table' },
+  'I mapped three education line items so you do not have to': { lens: 'impact', frameCue: 'Translates budget lines into the practical costs a classroom may face.', position: 'Asks readers to focus on classroom effects', temperature: 'Measured · explanatory', grounding: 'Uses photos of budget pages; exact pages not linked here' }
+};
+
+// Each strip counts only the creator examples shown for this story. A zero is
+// intentionally visible: three slots are an interface pattern, not a claim
+// that every story has three equally represented perspectives.
+// How each sample item sits in that story’s three subcategories, from 0 to 10.
+// Illustrative, like the rest of this briefing.
+export const LENS_SCORES = {
+  'Senate calendars next vote as camps trade numbers on the floor': { defense: 4, procedure: 8, trial: 3 },
+  'Allies call the complaint a political weapon; critics say delay is the point': { defense: 6, procedure: 5, trial: 5 },
+  'What the public record actually contains — and what it does not': { defense: 2, procedure: 8, trial: 2 },
+  'This is not justice. This is a pile-on.': { defense: 9, procedure: 1, trial: 2 },
+  'Impeachment is a constitutional tool, not a personality war': { defense: 2, procedure: 8, trial: 3 },
+  'The real story is who is scared of a public trial': { defense: 1, procedure: 3, trial: 9 },
+  'Class suspensions, stranded buses, and the roads still underwater at dawn': { local: 7, systems: 4, blame: 1 },
+  'Why the same underpasses flood first — a map of last night’s choke points': { local: 3, systems: 8, blame: 2 },
+  'Families wait on rooftops in Bulacan as water recedes slower than forecasts': { local: 6, systems: 3, blame: 2 },
+  'EDSA looks fine on TV. Your side street is a river.': { local: 9, systems: 2, blame: 3 },
+  'This is what a hotter sea does to a night of rain': { local: 3, systems: 8, blame: 4 },
+  'They knew. They still sent people to work.': { local: 2, systems: 2, blame: 9 },
+  'PCG: water cannon used again; Beijing repeats ‘intrusion’ line': { sovereignty: 5, verification: 7, restraint: 3 },
+  'Markets shrug; shippers do not — insurance talk after another encounter': { sovereignty: 3, verification: 4, restraint: 6 },
+  'Do not look away from the boat': { sovereignty: 9, verification: 2, restraint: 1 },
+  'Both sides have cameras. That is not the same as both sides being equal.': { sovereignty: 3, verification: 5, restraint: 8 },
+  'Ceiling holds; the fight is now over which programs get squeezed': { accusation: 2, procedure: 8, impact: 5 },
+  'Watch the insertions: what members asked to add, and what they would cut': { accusation: 5, procedure: 7, impact: 4 },
+  'Your taxes, their sagala': { accusation: 9, procedure: 2, impact: 3 },
+  'I mapped three education line items so you do not have to': { accusation: 1, procedure: 4, impact: 9 }
+};
+
+export const STORY_LENSES = {
+  'sara-impeachment': [
+    { id: 'defense', label: 'Defends Sara', icon: 'shield' },
+    { id: 'procedure', label: 'Focuses on process', icon: 'document' },
+    { id: 'trial', label: 'Urges public trial', icon: 'voice' }
+  ],
+  'luzon-flooding': [
+    { id: 'local', label: 'Local experience', icon: 'droplet' },
+    { id: 'systems', label: 'Structural causes', icon: 'document' },
+    { id: 'blame', label: 'Official blame', icon: 'voice' }
+  ],
+  'west-philippine-sea': [
+    { id: 'sovereignty', label: 'Sovereignty', icon: 'shield' },
+    { id: 'verification', label: 'Verification', icon: 'document' },
+    { id: 'restraint', label: 'De-escalation', icon: 'dove' }
+  ],
+  'national-budget': [
+    { id: 'accusation', label: 'Political blame', icon: 'voice' },
+    { id: 'procedure', label: 'Hearing process', icon: 'document' },
+    { id: 'impact', label: 'Classroom impact', icon: 'book' }
+  ]
+};

@@ -1,0 +1,10 @@
+[
+  {"type": "newsrooms", "name": "Philippine Daily Inquirer", "url": "https://www.inquirer.net/"},
+  {"type": "newsrooms", "name": "The Philippine Star", "url": "https://www.philstar.com/"},
+  {"type": "newsrooms", "name": "ABS-CBN News", "url": "https://www.abs-cbn.com/"},
+  {"type": "newsrooms", "name": "GMA News", "url": "https://www.gmanetwork.com/news/"},
+  {"type": "social media", "name": "Richard Heydarian", "url": "https://www.facebook.com/Richeydarian"},
+  {"type": "social media", "name": "CJ Hirro", "url": "https://www.facebook.com/cj.hirro"},
+  {"type": "social media", "name": "Jesus Falcis", "url": "https://www.facebook.com/profile.php?id=574878428"},
+  {"type": "social media", "name": "Sass Rogando Sasot", "url": "https://www.facebook.com/sassrogandosasot"}
+]
